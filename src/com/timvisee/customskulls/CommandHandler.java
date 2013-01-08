@@ -4,10 +4,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
@@ -19,13 +23,14 @@ public class CommandHandler {
 		plugin = instance;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command cmd,
 			String commandLabel, String[] args) {
 		if(commandLabel.equalsIgnoreCase("customskulls") ||
 				commandLabel.equalsIgnoreCase("customskull") ||
 				commandLabel.equalsIgnoreCase("cs")) {
 			
-			PermissionsManager pm = plugin.getPermissionsManager();
+			
 			
 			if(args.length == 0) {
 				sender.sendMessage(ChatColor.DARK_RED + "Unknown command!");
@@ -43,7 +48,7 @@ public class CommandHandler {
 				
 				// Check permissions
 				if(sender instanceof Player) {
-					if(!pm.hasPermission((Player) sender, "customskulls.command.status")) {
+					if(!hasPermission((Player) sender, "customskulls.command.status")) {
 						sender.sendMessage(ChatColor.DARK_RED + "You don't have permission!");
 						return true;
 					}
@@ -51,14 +56,15 @@ public class CommandHandler {
 				
 				// Define some variables with plugin data
 				PluginManager pluginManager = plugin.getServer().getPluginManager();
+				@SuppressWarnings("unused")
 				PluginDescriptionFile pdfFile = plugin.getDescription();
 				
 				sender.sendMessage(ChatColor.GREEN + "==========[ CUSTOM SKULLS STATUS ]==========");
 				sender.sendMessage(ChatColor.GRAY + "Plugin Information:");
 				
 				// Return the used permissions system
-				if(pm.isEnabled()) {
-					sender.sendMessage(ChatColor.GOLD + "Permissions: " + ChatColor.GREEN + pm.getUsedPermissionsSystemType().getName());
+				if(plugin.getPermissionsManager().isEnabled()) {
+					sender.sendMessage(ChatColor.GOLD + "Permissions: " + ChatColor.GREEN + plugin.getPermissionsManager().getUsedPermissionsSystemType().getName());
 				} else
 					sender.sendMessage(ChatColor.GOLD + "Permissions: " + ChatColor.DARK_RED + "Disabled");
 				
@@ -116,7 +122,7 @@ public class CommandHandler {
 				
 				// Check permissions
 				if(sender instanceof Player) {
-					if(!pm.hasPermission((Player) sender, "customskulls.command.reload")) {
+					if(!hasPermission((Player) sender, "customskulls.command.reload")) {
 						sender.sendMessage(ChatColor.DARK_RED + "You don't have permission!");
 						return true;
 					}
@@ -189,8 +195,98 @@ public class CommandHandler {
 					sender.sendMessage(ChatColor.YELLOW + "Use " + ChatColor.GOLD + "/" + commandLabel + " help " + ChatColor.YELLOW + "to view help");
 					return true;
 				}
+			} else if(args[0].equalsIgnoreCase("give")){
+				if(sender instanceof Player){
+					if(!hasPermission((Player) sender, "customskulls.command.give")){
+						sender.sendMessage(ChatColor.DARK_RED + "You don't have permission");
+						return true;
+					}					
+				}
+				
+				if(args.length == 1){
+					sender.sendMessage(ChatColor.DARK_RED + "Wrong command values!");
+					sender.sendMessage(ChatColor.YELLOW + "Use " + ChatColor.GOLD + "/" + commandLabel + " give <player> <type> [amount] [owner]");
+					return true;
+				}
+				
+				Player player = Bukkit.getPlayer(args[1]);
+				
+				if(player == null){
+					sender.sendMessage(ChatColor.DARK_RED + "Wrong command values!");
+					sender.sendMessage(ChatColor.YELLOW + args[1] + " is not online");
+					return true;
+				}
+				
+				int amount;
+				
+				if(args.length < 3){
+					sender.sendMessage(ChatColor.DARK_RED + "Wrong command values!");
+					sender.sendMessage(ChatColor.YELLOW + "Use " + ChatColor.GOLD + "/" + commandLabel + " give <player> <type> [amount] [owner]");
+					return true;
+				}
+				
+				if(args.length == 3){
+					amount = 1;					
+				} else {
+				
+					if(isInteger(args[3]))
+						amount = Integer.parseInt(args[3]);
+					else{
+						sender.sendMessage(ChatColor.DARK_RED + "Wrong command values!");
+						sender.sendMessage(ChatColor.YELLOW + args[3] + " is not a valid value");
+						return true;
+					}
+				}
+				
+				if(args[2].equalsIgnoreCase("creeper")){				
+					
+					player.getInventory().addItem(new ItemStack(397, amount, (short) 0, (byte) 4));
+					return true;
+										
+				} else if(args[2].equalsIgnoreCase("zombie")){
+					
+					player.getInventory().addItem(new ItemStack(397, amount, (short) 0, (byte) 2));
+					return true;
+					
+				} else if(args[2].equalsIgnoreCase("skeleton")){
+					
+					player.getInventory().addItem(new ItemStack(397, amount, (short) 0, (byte) 0));
+					return true;
+					
+				} else if(args[2].equalsIgnoreCase("wither")){
+					
+					player.getInventory().addItem(new ItemStack(397, amount, (short) 0, (byte) 1));
+					return true;
+					
+				} else if(args[2].equalsIgnoreCase("player")){
+					if(args.length <= 4){
+						sender.sendMessage(ChatColor.DARK_RED + "Wrong command values!");
+						sender.sendMessage(ChatColor.YELLOW + "Use " + ChatColor.GOLD + "/" + commandLabel + " give <player> <type> [amount] [owner]");
+						return true;
+					}
+					player.getInventory().addItem(CustomSkullsUtility.getSkullItemStack(amount, args[4]));
+					return true;
+					
+				} else {
+					sender.sendMessage(ChatColor.DARK_RED + "Wrong command values!");
+					sender.sendMessage(ChatColor.YELLOW + "Use 'creeper, 'zombie', 'skeleton', 'wither' or 'player' instead");
+					return true;
+				}					
 			}
 		}
 		return false;
+	}
+	
+	private boolean isInteger(String s){
+		try {
+			Integer.parseInt(s);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+	
+	private boolean hasPermission(Player p, String node){
+		return plugin.getPermissionsManager().hasPermission(p, node);
 	}
 }
