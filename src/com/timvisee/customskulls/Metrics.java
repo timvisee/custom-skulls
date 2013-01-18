@@ -225,7 +225,7 @@ public class Metrics {
 			}
 
 			// Is metrics already running?
-			if (task.getTaskId() >= 0) {
+			if (task != null) {
 				return true;
 			}
 

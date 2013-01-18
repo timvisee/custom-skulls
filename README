@@ -1,4 +1,8 @@
 Version 0.3
--Vault already covers PermissionsEx, GroupManager, and ZPermissions, with the exception of Permissions 2.0. Having two files to do what Vault already does is redundant.
--The copy() method in CustomSkulls is 
+-Vault already covers PermissionsEx, GroupManager, and ZPermissions, with the exception of Permissions 2.0. Having two files to do what Vault already does is redundant: removed PermissionsManager and PermissionsSystemType.
+-The copy() method in CustomSkulls is redundant, replaced with saveDefaultConfig().
+-Added missing config.yml to Git repository.
 -CommandHandler was split into functions based on the subcommand for easier readability and fixes.
+-Added command alias: skulls.
+-Changed syntax of give to <receiver> <type/player name> [amount] from confusing <player> <type> [amount] [owner].
+-If giving a skull with player name "player", it will default to a normal Head.

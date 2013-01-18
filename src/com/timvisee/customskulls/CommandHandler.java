@@ -265,8 +265,4 @@ public class CommandHandler {
 			return false;
 		}
 	}
-	
-	/*private boolean hasPermission(Player p, String node) {
-		return plugin.getPermissions().has(p, node);
-	}*/
 }
