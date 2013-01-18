@@ -12,7 +12,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class CustomSkullsEntityListener implements Listener {
-	public static CustomSkulls plugin;
+	private static CustomSkulls plugin;
 
 	public CustomSkullsEntityListener(CustomSkulls instance) {
 		plugin = instance;
@@ -29,7 +29,7 @@ public class CustomSkullsEntityListener implements Listener {
 			String entityName = e.getEntityType().getName();
 			
 			// Check if the settings thing is enabled
-			if(isConfigSettingEnabled(plugin.getConfig(), worldName, entityName, false)) {
+			if(isConfigSettingEnabled(worldName, entityName, false)) {
 				// The setting thing is enabled
 				
 				// Cancel the skull drop
@@ -38,18 +38,18 @@ public class CustomSkullsEntityListener implements Listener {
 						entry.setAmount(0);
 				
 				// Should a skull be droped?
-				if(getConfigSettingBoolean(plugin.getConfig(), worldName, entityName, "dropSkull", false)) {
-					// Get the drop chance
-					int chance = getConfigSettingInt(plugin.getConfig(), worldName, entityName, "dropChance", 40);
-					
-					// Should a skull be droped this time?
-					Random rand = new Random();
-					boolean dropSkull = (0 == rand.nextInt(chance));
-					
-					// If a skull should be droped, drop one
-					if(dropSkull)
-						dropSkull(1, e.getEntity().getLocation(), e.getEntity());
-				}
+				//if(getConfigSettingBoolean(worldName, entityName, "enable", false)) {
+				// Get the drop chance
+				int chance = getConfigSettingInt(worldName, entityName, "chance", 10);
+				
+				// Should a skull be droped this time?
+				Random rand = new Random();
+				boolean dropSkull = (0 == rand.nextInt(chance));
+				
+				// If a skull should be droped, drop one
+				if(dropSkull)
+					dropSkull(1, e.getEntity().getLocation(), e.getEntity());
+				//}
 			}
 		}	
 	}
@@ -61,7 +61,7 @@ public class CustomSkullsEntityListener implements Listener {
 		String playerName = e.getEntity().getName();
 		
 		// Check if the settings thing is enabled
-		if(isConfigSettingEnabled(plugin.getConfig(), worldName, entityName, false)) {
+		if(isConfigSettingEnabled(worldName, entityName, false)) {
 			// The setting thing is enabled
 			
 			// Cancel the skull drop
@@ -70,22 +70,22 @@ public class CustomSkullsEntityListener implements Listener {
 					entry.setAmount(0);
 			
 			// Should a skull be droped?
-			if(getConfigSettingBoolean(plugin.getConfig(), worldName, entityName, "dropSkull", false)) {
-				// Get the drop chance
-				int chance = getConfigSettingInt(plugin.getConfig(), worldName, entityName, "dropChance", 40);
-				
-				// Should a skull be droped this time?
-				Random rand = new Random();
-				boolean dropSkull = (0 == rand.nextInt(chance));
-				boolean dropPlayerSkull = getConfigSettingBoolean(plugin.getConfig(), worldName, entityName, "dropPlayerSkull", true);
-				
-				// If a skull should be droped, drop one
-				if(dropSkull)
-					if(!dropPlayerSkull)
-						dropSkull(1, e.getEntity().getLocation(), e.getEntity());
-					else
-						addPlayerSkullDrop(1, e, playerName);
-			}
+			//if(getConfigSettingBoolean(plugin.getConfig(), worldName, entityName, "dropSkull", false)) {
+			// Get the drop chance
+			int chance = getConfigSettingInt(worldName, entityName, "chance", 10);
+			
+			// Should a skull be droped this time?
+			Random rand = new Random();
+			boolean dropSkull = (0 == rand.nextInt(chance));
+			boolean dropPlayerSkull = getConfigSettingBoolean( worldName, entityName, "head", true);
+			
+			// If a skull should be droped, drop one
+			if(dropSkull)
+				if(!dropPlayerSkull)
+					dropSkull(1, e.getEntity().getLocation(), e.getEntity());
+				else
+					addPlayerSkullDrop(1, e, playerName);
+			//}
 		}
 	}
 	
@@ -97,30 +97,34 @@ public class CustomSkullsEntityListener implements Listener {
 		e.getDrops().add(CustomSkullsUtility.getSkullItemStack(amount, playerName));
 	}
 	
-	public boolean isConfigSettingEnabled(Configuration c, String worldName, String entityName, boolean def) {
+	public boolean isConfigSettingEnabled(String worldName, String entityName, boolean def) {
 		// The configuration file may not be null
-		if(c == null)
+		if(config() == null)
 			return def;
 		
-		return (c.getBoolean("drops.worlds." + worldName + "." + entityName + ".enabled",
-				c.getBoolean("drops.global." + entityName + ".enabled", def)));
+		return (config().getBoolean("drops.worlds." + worldName + "." + entityName + ".enable",
+				config().getBoolean("drops.global." + entityName + ".enable", def)));
 	}
 	
-	public boolean getConfigSettingBoolean(Configuration c, String worldName, String entityName, String node, boolean def) {
+	public boolean getConfigSettingBoolean(String worldName, String entityName, String node, boolean def) {
 		// The configuration file may not be null
-		if(c == null)
+		if(config() == null)
 			return def;
 		
-		return (c.getBoolean("drops.worlds." + worldName + "." + entityName + "." + node,
-				c.getBoolean("drops.global." + entityName + "." + node, def)));
+		return (config().getBoolean("drops.worlds." + worldName + "." + entityName + "." + node,
+				config().getBoolean("drops.global." + entityName + "." + node, def)));
 	}
 	
-	public int getConfigSettingInt(Configuration c, String worldName, String entityName, String node, int def) {
+	public int getConfigSettingInt(String worldName, String entityName, String node, int def) {
 		// The configuration file may not be null
-		if(c == null)
+		if(config() == null)
 			return def;
 		
-		return (c.getInt("drops.worlds." + worldName + "." + entityName + "." + node,
-				c.getInt("drops.global." + entityName + "." + node, def)));
+		return (config().getInt("drops.worlds." + worldName + "." + entityName + "." + node,
+				config().getInt("drops.global." + entityName + "." + node, def)));
+	}
+	
+	private Configuration config() {
+		return plugin.getConfig();
 	}
 }

@@ -158,7 +158,6 @@ public class CustomSkulls extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(label.equalsIgnoreCase("customskulls") || label.equalsIgnoreCase("customskull") || label.equalsIgnoreCase("skulls")) {
 			if(args.length == 0) {
-				sender.sendMessage(ChatColor.DARK_RED + "Unknown subcommand!");
 				sender.sendMessage(ChatColor.YELLOW + "Use " + ChatColor.GOLD + "/" + label + " help " + ChatColor.YELLOW + "to view help");
 				return true;
 			}

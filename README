@@ -6,3 +6,6 @@ Version 0.3
 -Added command alias: skulls.
 -Changed syntax of give to <receiver> <type/player name> [amount] from confusing <player> <type> [amount] [owner].
 -If giving a skull with player name "player", it will default to a normal Head.
+-Updated Metric to use BukkitTask.
+-Remove dropSkull from config.yml, essentially a duplicate of enable.
+-There's no reason to pass plugin into the EntityListener and then pass getConfig() in methods.
