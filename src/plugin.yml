@@ -1,16 +1,17 @@
 name: CustomSkulls
 main: com.timvisee.customskulls.CustomSkulls
-version: 0.1.2
+version: 0.3
 author: timvisee
-website: http://timvisee.com/
-softdepend: [Vault] #hack to fix trove errors
+authors: [PatPeter]
+website: http://dev.bukkit.org/server-mods/custom-skulls/
+depend: [Vault]
 commands:
-  customskulls:
-    description: Custom Skulls command
-    usage: /customskulls
-  customskull:
-    description: Custom Skulls command
-    usage: /customskull
-  cs:
-    description: Custom Skulls command
-    usage: /ck
+    customskulls:
+      description: Custom Skulls command
+      usage: /customskulls
+    customskull:
+      description: Custom Skulls command
+      usage: /customskull
+    skulls:
+      description: Custom Skulls command
+      usage: /skulls

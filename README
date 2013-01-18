@@ -1,0 +1,4 @@
+Version 0.3
+-Vault already covers PermissionsEx, GroupManager, and ZPermissions, with the exception of Permissions 2.0. Having two files to do what Vault already does is redundant.
+-The copy() method in CustomSkulls is 
+-CommandHandler was split into functions based on the subcommand for easier readability and fixes.
