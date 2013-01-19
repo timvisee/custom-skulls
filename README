@@ -9,3 +9,4 @@ Version 0.3
 -Updated Metric to use BukkitTask.
 -Remove dropSkull from config.yml, essentially a duplicate of enable.
 -There's no reason to pass plugin into the EntityListener and then pass getConfig() in methods.
+-If the owner deletes the config and reloads, it will not throw a NullPointerException.

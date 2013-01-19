@@ -43,13 +43,15 @@ public class CustomSkullsEntityListener implements Listener {
 				int chance = getConfigSettingInt(worldName, entityName, "chance", 10);
 				
 				// Should a skull be droped this time?
-				Random rand = new Random();
-				boolean dropSkull = (0 == rand.nextInt(chance));
+				int probability = new Random().nextInt(101);
+				boolean dropSkull = (probability <= chance ? true : false);
 				
 				// If a skull should be droped, drop one
 				if(dropSkull)
 					dropSkull(1, e.getEntity().getLocation(), e.getEntity());
 				//}
+			} else if (CustomSkulls.DEBUG) {
+				CustomSkulls.log.info(entityName + " head drop in world " + worldName + " skipped.");
 			}
 		}	
 	}
@@ -75,9 +77,9 @@ public class CustomSkullsEntityListener implements Listener {
 			int chance = getConfigSettingInt(worldName, entityName, "chance", 10);
 			
 			// Should a skull be droped this time?
-			Random rand = new Random();
-			boolean dropSkull = (0 == rand.nextInt(chance));
-			boolean dropPlayerSkull = getConfigSettingBoolean( worldName, entityName, "head", true);
+			int probability = new Random().nextInt(101);
+			boolean dropSkull = (probability <= chance ? true : false);
+			boolean dropPlayerSkull = getConfigSettingBoolean(worldName, entityName, "head", false);
 			
 			// If a skull should be droped, drop one
 			if(dropSkull)
@@ -86,11 +88,15 @@ public class CustomSkullsEntityListener implements Listener {
 				else
 					addPlayerSkullDrop(1, e, playerName);
 			//}
+		} else if (CustomSkulls.DEBUG) {
+			CustomSkulls.log.info(entityName + " head drop in world " + worldName + " skipped.");
 		}
 	}
 	
 	public void dropSkull(int amount, Location loc, Entity e) {
 		loc.getWorld().dropItemNaturally(loc, CustomSkullsUtility.getSkullItemStack(amount, e));
+		if (CustomSkulls.DEBUG)
+			CustomSkulls.log.info("Dropped " + amount + " head at location " + loc.toString() + " for entity " + e.toString());
 	}
 	
 	public void addPlayerSkullDrop(int amount, PlayerDeathEvent e, String playerName) {

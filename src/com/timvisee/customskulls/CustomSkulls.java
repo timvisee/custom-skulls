@@ -20,7 +20,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.timvisee.customskulls.Metrics.Graph;
 
 public class CustomSkulls extends JavaPlugin {
-	private static final Logger log = Logger.getLogger("Minecraft");
+	protected static boolean DEBUG = false;
+	protected static final Logger log = Logger.getLogger("Minecraft");
 	
 	private final CustomSkullsEntityListener entityListener = new CustomSkullsEntityListener(this);
 	
@@ -44,6 +45,9 @@ public class CustomSkulls extends JavaPlugin {
 		
 		// Load the config files
 		reloadConfigFiles();
+		
+		if (getConfig().getBoolean("debug", false))
+			DEBUG = true;
 		
 		// Setup the permission manager
 		setupPermissions();
@@ -134,6 +138,8 @@ public class CustomSkulls extends JavaPlugin {
 	
 	public boolean reloadConfigFiles() {
 		File configFile = new File(getDataFolder(), "config.yml");
+		if(!configFile.exists())
+			this.saveDefaultConfig();
 		try {
 			getConfig().load(configFile);
 			return true;
