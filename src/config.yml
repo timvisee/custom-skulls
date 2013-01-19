@@ -1,0 +1,26 @@
+drops:
+    global:
+        Skeleton:
+            enable: true
+            chance: 10
+        Wither:
+            enable: true
+            chance: 10
+        Zombie:
+            enable: true
+            chance: 10
+        Player:
+            enable: true
+            head: true
+            chance: 10
+        Creeper:
+            enable: true
+            chance: 10
+    worlds:
+        world:
+            Player:
+                enable: true
+                head: true
+                chance: 5
+debug: false
+configVersion: 1

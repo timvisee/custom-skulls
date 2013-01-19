@@ -10,22 +10,22 @@ public class CustomSkullsUtility {
 	public static ItemStack getSkullItemStack(int amount, Entity e) {
 		// Convert the entity type into a skull data value
 		switch (e.getType()) {
-		case SKELETON:
-			switch(((Skeleton) e).getSkeletonType()){
-			case NORMAL:
-				return getSkullItemStack(amount, (byte) 0);
-			case WITHER:
-				return getSkullItemStack(amount, (byte) 1);			
-			}
-					
-		case ZOMBIE:
-			return getSkullItemStack(amount, (byte) 2);
-		case PLAYER:
-			return getSkullItemStack(amount, (byte) 3);
-		case CREEPER:
-			return getSkullItemStack(amount, (byte) 4);
-		default:
-			return null;
+			case SKELETON:
+				switch(((Skeleton) e).getSkeletonType()) {
+					case NORMAL:
+						return getSkullItemStack(amount, (byte) 0);
+					case WITHER:
+						return getSkullItemStack(amount, (byte) 1);			
+				}
+						
+			case ZOMBIE:
+				return getSkullItemStack(amount, (byte) 2);
+			case PLAYER:
+				return getSkullItemStack(amount, (byte) 3);
+			case CREEPER:
+				return getSkullItemStack(amount, (byte) 4);
+			default:
+				return null;
 		}
 	}
 	
