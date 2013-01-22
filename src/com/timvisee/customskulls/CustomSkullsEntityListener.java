@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
 public class CustomSkullsEntityListener implements Listener {
 	public static CustomSkulls plugin;
@@ -45,7 +44,8 @@ public class CustomSkullsEntityListener implements Listener {
 					
 					// Should a skull be droped this time?
 					Random rand = new Random();
-					boolean dropSkull = (0 == rand.nextInt(chance));
+					int probability = rand.nextInt(101);
+				 	boolean dropSkull = (probability <= chance);
 					
 					// If a skull should be droped, drop one
 					if(dropSkull)
@@ -71,13 +71,14 @@ public class CustomSkullsEntityListener implements Listener {
 					entry.setAmount(0);
 			
 			// Should a skull be droped?
-			if(getConfigSettingBoolean(plugin.getConfig(), worldName, entityName, "dropSkull", false)) {
+			if(getConfigSettingBoolean(plugin.getConfig(), worldName, entityName, "dropEntitySkull", false)) {
 				// Get the drop chance
 				int chance = getConfigSettingInt(plugin.getConfig(), worldName, entityName, "dropChance", 40);
 				
 				// Should a skull be droped this time?
 				Random rand = new Random();
-				boolean dropSkull = (0 == rand.nextInt(chance));
+				int probability = rand.nextInt(101);
+			 	boolean dropSkull = (probability <= chance);
 				boolean dropPlayerSkull = getConfigSettingBoolean(plugin.getConfig(), worldName, entityName, "dropPlayerSkull", true);
 				
 				// If a skull should be droped, drop one

@@ -1,0 +1,31 @@
+drops:
+    global:
+        Skeleton:
+            enabled: true
+            dropSkull: true
+            dropChance: 40
+        Wither:
+            enabled: true
+            dropSkull: true
+            dropChance: 40
+        Zombie:
+            enabled: true
+            dropSkull: true
+            dropChance: 40
+        Player:
+            enabled: true
+            dropSkull: true
+            dropPlayerSkull: true
+            dropChance: 40
+        Creeper:
+            enabled: true
+            dropSkull: true
+            dropChance: 40
+    worlds:
+        WORLD_NAME:
+            Player:
+                enabled: true
+                dropEntitySkull: true
+                dropPlayerSkull: true
+                dropChance: 5
+configVersion: 1

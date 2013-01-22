@@ -2,13 +2,11 @@ package com.timvisee.customskulls;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Date;
 import java.util.logging.Logger;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -40,10 +38,10 @@ public class CustomSkulls extends JavaPlugin {
 		
 		// Generate the  default config files if they aren't available
 		generateDefaultConfigs();
-		
+						
 		// Load the config files
 		reloadConfigFiles();
-		
+				
 		// Setup the permission manager
 		setupPermissionsManager();
 				
@@ -107,23 +105,8 @@ public class CustomSkulls extends JavaPlugin {
 		File configFile = new File(getDataFolder(), "config.yml");
 		if(!configFile.exists()) {
 			log.info("[CustomSkulls] Generating default config file");
-			copy(getResource("res/DefaultFiles/config.yml"), configFile);
+			this.saveDefaultConfig();
 		}
-	}
-	
-	private void copy(InputStream in, File file) {
-	    try {
-	        OutputStream out = new FileOutputStream(file);
-	        byte[] buf = new byte[1024];
-	        int len;
-	        while((len=in.read(buf))>0){
-	            out.write(buf,0,len);
-	        }
-	        out.close();
-	        in.close();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
 	}
 	
 	/**
@@ -166,10 +149,27 @@ public class CustomSkulls extends JavaPlugin {
 		return this.enabledDate;
 	}
 	
-	public boolean onCommand(CommandSender sender, Command cmd,
-			String commandLabel, String[] args) {
-		// Run the command through the command handler
-		CommandHandler ch = new CommandHandler(this);
-		return ch.onCommand(sender, cmd, commandLabel, args);
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if(label.equalsIgnoreCase("customskulls") || label.equalsIgnoreCase("customskull") || label.equalsIgnoreCase("skulls")) {
+			if(args.length == 0) {
+				sender.sendMessage(ChatColor.YELLOW + "Use " + ChatColor.GOLD + "/" + label + " help " + ChatColor.YELLOW + "to view help");
+				return true;
+			}
+
+			CommandHandler ch = new CommandHandler(this, sender, label, args);
+			if(args[0].equals("status") || args[0].equals("statics") || args[0].equals("stats") || args[0].equals("s")) {
+				return ch.status();
+			} else if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("load")) {
+				return ch.reload();
+			} else if(args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("ver") || args[0].equalsIgnoreCase("v") ||
+					args[0].equalsIgnoreCase("about") || args[0].equalsIgnoreCase("a")) {
+				return ch.version();
+			} else if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("h") || args[0].equalsIgnoreCase("?")) {			
+				return ch.help();
+			} else if(args[0].equalsIgnoreCase("give")) {
+				return ch.give();
+			}
+		}
+		return false;
 	}
 }

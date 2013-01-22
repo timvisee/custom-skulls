@@ -1,6 +1,6 @@
 name: CustomSkulls
 main: com.timvisee.customskulls.CustomSkulls
-version: 0.1.2
+version: 0.2.1
 author: timvisee
 website: http://timvisee.com/
 softdepend: [Vault] #hack to fix trove errors
@@ -11,6 +11,6 @@ commands:
   customskull:
     description: Custom Skulls command
     usage: /customskull
-  cs:
-    description: Custom Skulls command
-    usage: /ck
+  skulls:
+      description: Custom Skulls command
+      usage: /skulls
