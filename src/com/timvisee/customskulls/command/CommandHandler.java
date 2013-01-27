@@ -1,4 +1,4 @@
-package com.timvisee.customskulls;
+package com.timvisee.customskulls.command;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -11,6 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
+
+import com.timvisee.customskulls.CustomSkulls;
+import com.timvisee.customskulls.until.CustomSkullsUtility;
 
 public class CommandHandler {
 
@@ -27,7 +30,7 @@ public class CommandHandler {
 		this.args = args;
 	}
 
-	protected boolean status() {
+	public boolean status() {
 		if(args.length != 1) {
 			sender.sendMessage(ChatColor.DARK_RED + "Wrong command values!");
 			sender.sendMessage(ChatColor.YELLOW + "Use " + ChatColor.GOLD + "/" + label + " help " + args[0] + ChatColor.YELLOW + " to view help");
@@ -95,7 +98,7 @@ public class CommandHandler {
 		return true;
 	}
 
-	protected boolean reload() {
+	public boolean reload() {
 		if(args.length != 1) {
 			sender.sendMessage(ChatColor.DARK_RED + "Wrong command values!");
 			sender.sendMessage(ChatColor.YELLOW + "Use " + ChatColor.GOLD + "/" + label + " help " + args[0] + ChatColor.YELLOW + " to view help");
@@ -119,7 +122,7 @@ public class CommandHandler {
 		return true;
 	}
 
-	protected boolean version() {
+	public boolean version() {
 		if(args.length != 1) {
 			sender.sendMessage(ChatColor.DARK_RED + "Wrong command values!");
 			sender.sendMessage(ChatColor.YELLOW + "Use " + ChatColor.GOLD + "/" + label + " help " + args[0] + ChatColor.YELLOW + " to view help");
@@ -132,18 +135,30 @@ public class CommandHandler {
 		return true;
 	}
 
-	protected boolean help() {
+	public boolean help() {
 		// Help commands (/ss help [sub-categories])
 		if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("h") || args[0].equalsIgnoreCase("?")) {
 			if(args.length == 1) {
 				// View the help
 				sender.sendMessage(ChatColor.GREEN + "==========[ CUSTOM SKULLS HELP ]==========");
 				sender.sendMessage(ChatColor.GOLD + "/" + label + " help [command]" + ChatColor.WHITE + " : View help");
+				sender.sendMessage(ChatColor.GOLD + "/" + label + " give <player> <type/player> [amount]" + ChatColor.WHITE + " : Give skulls");
 				sender.sendMessage(ChatColor.GOLD + "/" + label + " reload" + ChatColor.WHITE + " : Reload all data");
 				sender.sendMessage(ChatColor.GOLD + "/" + label + " status" + ChatColor.WHITE + " : View all plugin status");
 				sender.sendMessage(ChatColor.GOLD + "/" + label + " version" + ChatColor.WHITE + " : View plugin version");
 				return true;
 
+			}
+			if(args[1].equals("give") || args[1].equals("g") || args[1].equals("i")) {
+				// View the help
+				sender.sendMessage("");
+				sender.sendMessage(ChatColor.GREEN + "==========[ CUSTOM SKULLS HELP ]==========");
+				sender.sendMessage(ChatColor.GOLD + "/" + label + " " + args[1] + " <player> <type/player> [amount]" + ChatColor.WHITE + " : Give skulls");
+				sender.sendMessage("");
+				sender.sendMessage(ChatColor.GOLD + "player" + ChatColor.WHITE + " : Player to give skulls to");
+				sender.sendMessage(ChatColor.GOLD + "type/player" + ChatColor.WHITE + " : Skull type or player name");
+				sender.sendMessage(ChatColor.GOLD + "amount" + ChatColor.WHITE + " : Amount of skulls to give");
+				return true;
 			}
 			if(args[1].equals("reload") || args[1].equals("load")) {
 				// View the help
@@ -180,7 +195,7 @@ public class CommandHandler {
 	}
 
 	@SuppressWarnings("deprecation")
-	protected boolean give() {
+	public boolean give() {
 		if (sender instanceof Player) {
 			if (!plugin.getPermissionsManager().hasPermission((Player) sender, "customskulls.command.give")){
 				sender.sendMessage(ChatColor.DARK_RED + "You don't have customskulls.command.give.");
@@ -190,7 +205,7 @@ public class CommandHandler {
 
 		if (args.length == 1) {
 			sender.sendMessage(ChatColor.DARK_RED + "Wrong command values!");
-			sender.sendMessage(ChatColor.YELLOW + "Use " + ChatColor.GOLD + "/" + label + " give <player> <type> [amount]");
+			sender.sendMessage(ChatColor.YELLOW + "Use " + ChatColor.GOLD + "/" + label + " give <player> <type/player> [amount]");
 			return true;
 		}
 
@@ -206,7 +221,7 @@ public class CommandHandler {
 
 		if (args.length < 3) {
 			sender.sendMessage(ChatColor.DARK_RED + "Wrong command values!");
-			sender.sendMessage(ChatColor.YELLOW + "Use " + ChatColor.GOLD + "/" + label + " give <player> <type> [amount]");
+			sender.sendMessage(ChatColor.YELLOW + "Use " + ChatColor.GOLD + "/" + label + " give <player> <type/player> [amount]");
 			return true;
 		}
 
@@ -224,15 +239,19 @@ public class CommandHandler {
 
 		if(args[2].equalsIgnoreCase("creeper")) {
 			player.getInventory().addItem(new ItemStack(397, amount, (short) 0, (byte) 4));
+			player.sendMessage(ChatColor.GREEN + "You received " + String.valueOf(amount) + " creeper " + (amount==1 ? "skull" : "skulls"));
 			return true;
 		} else if(args[2].equalsIgnoreCase("zombie")) {
 			player.getInventory().addItem(new ItemStack(397, amount, (short) 0, (byte) 2));
+			player.sendMessage(ChatColor.GREEN + "You received " + String.valueOf(amount) + " zombie " + (amount==1 ? "skull" : "skulls"));
 			return true;
 		} else if(args[2].equalsIgnoreCase("skeleton")) {
 			player.getInventory().addItem(new ItemStack(397, amount, (short) 0, (byte) 0));
+			player.sendMessage(ChatColor.GREEN + "You received " + String.valueOf(amount) + " skeleton " + (amount==1 ? "skull" : "skulls"));
 			return true;
 		} else if(args[2].equalsIgnoreCase("wither")) {
 			player.getInventory().addItem(new ItemStack(397, amount, (short) 0, (byte) 1));
+			player.sendMessage(ChatColor.GREEN + "You received " + String.valueOf(amount) + " wither " + (amount==1 ? "skull" : "skulls"));
 			return true;
 		} else {
 			if (args.length < 3) {
@@ -243,10 +262,12 @@ public class CommandHandler {
 
 			if (args[2].equalsIgnoreCase("player")) {
 				player.getInventory().addItem(CustomSkullsUtility.getSkullItemStack(amount, (byte) 3));
+				player.sendMessage(ChatColor.GREEN + "You received " + String.valueOf(amount) + " wither " + (amount==1 ? "skull" : "skulls"));
 				return true;
 			}
 
 			player.getInventory().addItem(CustomSkullsUtility.getSkullItemStack(amount, args[2]));
+			player.sendMessage(ChatColor.GREEN + "You received " + String.valueOf(amount) + " player " + (amount==1 ? "skull" : "skulls") + " of " + args[2]);
 			return true;
 		}
 	}

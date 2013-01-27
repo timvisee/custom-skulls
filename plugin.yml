@@ -1,6 +1,7 @@
 name: CustomSkulls
 main: com.timvisee.customskulls.CustomSkulls
-version: 0.2.1
+description: 'Make mobs and players drop skulls'
+version: 0.2
 author: timvisee
 website: http://timvisee.com/
 softdepend: [Vault] #hack to fix trove errors

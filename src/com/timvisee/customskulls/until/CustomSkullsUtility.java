@@ -1,4 +1,4 @@
-package com.timvisee.customskulls;
+package com.timvisee.customskulls.until;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Skeleton;

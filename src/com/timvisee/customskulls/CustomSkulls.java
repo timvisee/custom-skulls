@@ -15,6 +15,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.timvisee.customskulls.Metrics.Graph;
+import com.timvisee.customskulls.command.CommandHandler;
+import com.timvisee.customskulls.listener.CustomSkullsEntityListener;
+import com.timvisee.customskulls.manager.PermissionsManager;
 
 public class CustomSkulls extends JavaPlugin {
 	private static final Logger log = Logger.getLogger("Minecraft");
@@ -166,7 +169,7 @@ public class CustomSkulls extends JavaPlugin {
 				return ch.version();
 			} else if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("h") || args[0].equalsIgnoreCase("?")) {			
 				return ch.help();
-			} else if(args[0].equalsIgnoreCase("give")) {
+			} else if(args[0].equalsIgnoreCase("give") || args[0].equalsIgnoreCase("g") || args[0].equalsIgnoreCase("i")) {
 				return ch.give();
 			}
 		}

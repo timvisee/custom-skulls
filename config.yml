@@ -28,4 +28,4 @@ drops:
                 dropEntitySkull: true
                 dropPlayerSkull: true
                 dropChance: 5
-configVersion: 1
+configVersion: 2
